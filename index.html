@@ -52,8 +52,33 @@
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
+
+    .tabela-container {
+      height: 300px; /* Altura fixa para a rolagem */
+      overflow-y: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background-color: #f4f4f4;
+      z-index: 2;
+    }
+
   </style>
   
+<!-- BARRA DE NAVEGAÇÃO -->
   <div class="navbar">
     <button onclick="showScreen('inicio')">Início</button>
     <button onclick="showScreen('conversor')">📐 mm → mm²</button>
@@ -77,49 +102,56 @@
   <div id="tabela" class="screen">
     <div class="title">📋 Tabela AWG</div>
     <div class="box">
+      <div class="tabela-container">
       <table border="1" cellpadding="6">
-        <tr>
-          <th>AWG</th>
-          <th>Diâmetro (mm)</th>
-          <th>Área (mm²)</th>
-          <th>Resistência (Ω/km)</th>
-          <th>Corrente Máx. (A)</th>
-          <th>Bitola Equivalente (mm)</th>
-          <tr><td>0000 (4/0)</td><td>11,684</td><td>107,22</td><td>0,160</td><td>380</td><td>120 mm</td></tr>
-          <tr><td>000 (3/0)</td><td>10,405</td><td>85,03</td><td>0,201</td><td>330</td><td>95 mm</td></tr>
-          <tr><td>00 (2/0)</td><td>9,266</td><td>67,43</td><td>0,254</td><td>283</td><td>70 mm</td></tr>
-          <tr><td>0 (1/0)</td><td>8,251</td><td>53,48</td><td>0,320</td><td>245</td><td>50 mm</td></tr>
-          <tr><td>1</td><td>7,348</td><td>42,41</td><td>0,403</td><td>211</td><td>35 mm</td></tr>
-          <tr><td>2</td><td>6,544</td><td>33,62</td><td>0,508</td><td>181</td><td>25 mm</td></tr>
-          <tr><td>3</td><td>5,827</td><td>26,67</td><td>0,641</td><td>157</td><td>16 mm</td></tr>
-          <tr><td>4</td><td>5,189</td><td>21,15</td><td>0,809</td><td>135</td><td>16 mm</td></tr>
-          <tr><td>5</td><td>4,621</td><td>16,77</td><td>1,02</td><td>119</td><td>10 mm</td></tr>
-          <tr><td>6</td><td>4,115</td><td>13,30</td><td>1,29</td><td>101</td><td>10 mm</td></tr>
-          <tr><td>7</td><td>3,665</td><td>10,55</td><td>1,63</td><td>89</td><td>6 mm</td></tr>
-          <tr><td>8</td><td>3,264</td><td>8,37</td><td>2,06</td><td>73</td><td>6 mm</td></tr>
-          <tr><td>9</td><td>2,906</td><td>6,63</td><td>2,59</td><td>62</td><td>4 mm</td></tr>
-          <tr><td>10</td><td>2,588</td><td>5,26</td><td>3,28</td><td>55</td><td>4 mm</td></tr>
-          <tr><td>11</td><td>2,304</td><td>4,17</td><td>4,13</td><td>41</td><td>2,5 mm</td></tr>
-          <tr><td>12</td><td>2,053</td><td>3,31</td><td>5,21</td><td>34</td><td>2,5 mm</td></tr>
-          <tr><td>13</td><td>1,828</td><td>2,62</td><td>6,57</td><td>29</td><td>1,5 mm</td></tr>
-          <tr><td>14</td><td>1,628</td><td>2,08</td><td>8,29</td><td>25</td><td>1,5 mm</td></tr>
-          <tr><td>15</td><td>1,45</td><td>1,65</td><td>10,45</td><td>22</td><td>1 mm</td></tr>
-          <tr><td>16</td><td>1,291</td><td>1,31</td><td>13,17</td><td>18</td><td>1 mm</td></tr>
-          <tr><td>17</td><td>1,15</td><td>1,04</td><td>16,61</td><td>16</td><td>0,75 mm</td></tr>
-          <tr><td>18</td><td>1,024</td><td>0,823</td><td>20,95</td><td>14</td><td>0,75 mm</td></tr>
-          <tr><td>19</td><td>0,911</td><td>0,653</td><td>26,42</td><td>11</td><td>0,5 mm</td></tr>
-          <tr><td>20</td><td>0,812</td><td>0,518</td><td>33,3</td><td>10</td><td>0,5 mm</td></tr>
-          <tr><td>21</td><td>0,723</td><td>0,410</td><td>42,0</td><td>8,7</td><td>0,35 mm</td></tr>
-          <tr><td>22</td><td>0,644</td><td>0,326</td><td>52,9</td><td>7</td><td>0,35 mm</td></tr>
-          <tr><td>23</td><td>0,573</td><td>0,258</td><td>66,8</td><td>5,8</td><td>0,25 mm</td></tr>
-          <tr><td>24</td><td>0,511</td><td>0,205</td><td>84,2</td><td>4,8</td><td>0,2 mm</td></tr>
-          <tr><td>25</td><td>0,455</td><td>0,162</td><td>106,0</td><td>4,3</td><td>0,2 mm</td></tr>
-          <tr><td>26</td><td>0,405</td><td>0,129</td><td>133,0</td><td>3,5</td><td>0,14 mm</td></tr>
-          <tr><td>27</td><td>0,361</td><td>0,102</td><td>168,0</td><td>3</td><td>0,14 mm</td></tr>
-          <tr><td>28</td><td>0,321</td><td>0,081</td><td>212,0</td><td>2,3</td><td>0,08 mm</td></tr>
-          <tr><td>29</td><td>0,286</td><td>0,064</td><td>268,0</td><td>1,8</td><td>0,08 mm</td></tr>
-          <tr><td>30</td><td>0,255</td><td>0,050</td><td>338,0</td><td>1,4</td><td>0,05 mm</td></tr>
+        <thead>
+          <tr>
+            <th>AWG</th>
+            <th>Diâmetro (mm)</th>
+            <th>Área (mm²)</th>
+            <th>Resistência (Ω/km)</th>
+            <th>Corrente Máx. (A)</th>
+            <th>Bitola Equivalente (mm)</th>
+          </tr>
+        </thead>
+          <tbody>
+            <tr><td>0000 (4/0)</td><td>11,684</td><td>107,22</td><td>0,160</td><td>380</td><td>120 mm</td></tr>
+            <tr><td>000 (3/0)</td><td>10,405</td><td>85,03</td><td>0,201</td><td>330</td><td>95 mm</td></tr>
+            <tr><td>00 (2/0)</td><td>9,266</td><td>67,43</td><td>0,254</td><td>283</td><td>70 mm</td></tr>
+            <tr><td>0 (1/0)</td><td>8,251</td><td>53,48</td><td>0,320</td><td>245</td><td>50 mm</td></tr>
+            <tr><td>1</td><td>7,348</td><td>42,41</td><td>0,403</td><td>211</td><td>35 mm</td></tr>
+            <tr><td>2</td><td>6,544</td><td>33,62</td><td>0,508</td><td>181</td><td>25 mm</td></tr>
+            <tr><td>3</td><td>5,827</td><td>26,67</td><td>0,641</td><td>157</td><td>16 mm</td></tr>
+            <tr><td>4</td><td>5,189</td><td>21,15</td><td>0,809</td><td>135</td><td>16 mm</td></tr>
+            <tr><td>5</td><td>4,621</td><td>16,77</td><td>1,02</td><td>119</td><td>10 mm</td></tr>
+            <tr><td>6</td><td>4,115</td><td>13,30</td><td>1,29</td><td>101</td><td>10 mm</td></tr>
+            <tr><td>7</td><td>3,665</td><td>10,55</td><td>1,63</td><td>89</td><td>6 mm</td></tr>
+            <tr><td>8</td><td>3,264</td><td>8,37</td><td>2,06</td><td>73</td><td>6 mm</td></tr>
+            <tr><td>9</td><td>2,906</td><td>6,63</td><td>2,59</td><td>62</td><td>4 mm</td></tr>
+            <tr><td>10</td><td>2,588</td><td>5,26</td><td>3,28</td><td>55</td><td>4 mm</td></tr>
+            <tr><td>11</td><td>2,304</td><td>4,17</td><td>4,13</td><td>41</td><td>2,5 mm</td></tr>
+            <tr><td>12</td><td>2,053</td><td>3,31</td><td>5,21</td><td>34</td><td>2,5 mm</td></tr>
+            <tr><td>13</td><td>1,828</td><td>2,62</td><td>6,57</td><td>29</td><td>1,5 mm</td></tr>
+            <tr><td>14</td><td>1,628</td><td>2,08</td><td>8,29</td><td>25</td><td>1,5 mm</td></tr>
+            <tr><td>15</td><td>1,45</td><td>1,65</td><td>10,45</td><td>22</td><td>1 mm</td></tr>
+            <tr><td>16</td><td>1,291</td><td>1,31</td><td>13,17</td><td>18</td><td>1 mm</td></tr>
+            <tr><td>17</td><td>1,15</td><td>1,04</td><td>16,61</td><td>16</td><td>0,75 mm</td></tr>
+            <tr><td>18</td><td>1,024</td><td>0,823</td><td>20,95</td><td>14</td><td>0,75 mm</td></tr>
+            <tr><td>19</td><td>0,911</td><td>0,653</td><td>26,42</td><td>11</td><td>0,5 mm</td></tr>
+            <tr><td>20</td><td>0,812</td><td>0,518</td><td>33,3</td><td>10</td><td>0,5 mm</td></tr>
+            <tr><td>21</td><td>0,723</td><td>0,410</td><td>42,0</td><td>8,7</td><td>0,35 mm</td></tr>
+            <tr><td>22</td><td>0,644</td><td>0,326</td><td>52,9</td><td>7</td><td>0,35 mm</td></tr>
+            <tr><td>23</td><td>0,573</td><td>0,258</td><td>66,8</td><td>5,8</td><td>0,25 mm</td></tr>
+            <tr><td>24</td><td>0,511</td><td>0,205</td><td>84,2</td><td>4,8</td><td>0,2 mm</td></tr>
+            <tr><td>25</td><td>0,455</td><td>0,162</td><td>106,0</td><td>4,3</td><td>0,2 mm</td></tr>
+            <tr><td>26</td><td>0,405</td><td>0,129</td><td>133,0</td><td>3,5</td><td>0,14 mm</td></tr>
+            <tr><td>27</td><td>0,361</td><td>0,102</td><td>168,0</td><td>3</td><td>0,14 mm</td></tr>
+            <tr><td>28</td><td>0,321</td><td>0,081</td><td>212,0</td><td>2,3</td><td>0,08 mm</td></tr>
+            <tr><td>29</td><td>0,286</td><td>0,064</td><td>268,0</td><td>1,8</td><td>0,08 mm</td></tr>
+            <tr><td>30</td><td>0,255</td><td>0,050</td><td>338,0</td><td>1,4</td><td>0,05 mm</td></tr>
+        </tbody>
         </table>
+      </div>
     </div>
   </div> <!-- FIM TELA -->
   
@@ -146,7 +178,7 @@
     </div>
   </div> <!-- FIM TELA -->
   
-  <script>
+  <script> // JAVA SCRIPT
     function showScreen(id) {
       document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
       document.getElementById(id).classList.add("active");
@@ -207,10 +239,11 @@
       document.getElementById("resultadoConversao").innerHTML = `
         Diâmetro: <strong>${numeroFormatado} mm</strong><br>
         Área aproximada: <strong>${areaFormatada} mm²</strong>
-      `;
+      `;    
     }
   
     function compararAWG() {
+
       const valor = parseFloat(document.getElementById("areaInput").value);
       if (isNaN(valor)) return alert("Digite um valor válido!");
   
@@ -224,7 +257,7 @@
           maisProximo = item;
         }
       }
-  
+
       document.getElementById("resultado").innerHTML = `
         Valor informado: <strong>${valor} mm²</strong><br>
         AWG mais próximo: <strong>${maisProximo.awg}</strong> (área real: ${maisProximo.area} mm²)
@@ -249,7 +282,7 @@
     const horaBrasilia = agora.toLocaleString('pt-BR', options);
     div.textContent = `Horário de Brasília: ${horaBrasilia}`;
     }
-
+    
     // Atualiza imediatamente
     atualizarHorarioBrasilia();
 
