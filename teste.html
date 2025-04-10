@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Delpi - Erik Motta</title>
-  <link rel="stylesheet" href="style.css">
-<style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      background: #f0f0f0;
+      background: #f4f6f8;
+      color: #333;
     }
-  
     .navbar {
       background: #333;
       color: #fff;
@@ -18,7 +18,6 @@
       display: flex;
       gap: 10px;
     }
-  
     .navbar button {
       background: #444;
       color: #fff;
@@ -26,78 +25,132 @@
       padding: 8px 12px;
       cursor: pointer;
       border-radius: 4px;
+      transition: background 0.3s;
     }
-  
     .navbar button:hover {
       background: #555;
     }
-  
     .screen {
       display: none;
       padding: 20px;
     }
-  
     .active {
       display: block;
     }
-  
     .title {
-      font-size: 20px;
-      margin-bottom: 10px;
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #222;
     }
-  
     .box {
       background: #fff;
-      padding: 15px;
+      padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-
     .tabela-container {
-      height: 300px; /* Altura fixa para a rolagem */
+      max-height: 400px;
       overflow-y: auto;
+      margin-top: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
     }
-
     th, td {
       border: 1px solid #ccc;
       padding: 8px;
       text-align: left;
     }
-
     thead th {
       position: sticky;
       top: 0;
-      background-color: #f4f4f4;
+      background-color: #fafafa;
       z-index: 2;
     }
-
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+    .filter-container input {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .filter-container button {
+      padding: 6px 12px;
+      border: none;
+      background: #007BFF;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .filter-container button:hover {
+      background: #0056b3;
+    }
   </style>
-  
-<!-- BARRA DE NAVEGAÇÃO -->
+</head>
+<body>
+
   <div class="navbar">
     <button onclick="showScreen('inicio')">Início</button>
     <button onclick="showScreen('conversor')">📐 mm → mm²</button>
     <button onclick="showScreen('comparador')">🔍 Comparador</button>
     <button onclick="showScreen('tabela')">📋 Tabela AWG</button>
+    <button onclick="showScreen('uploadExcel')">📁 Importar Excel</button>
   </div>
-  
-  <!-- TELA: Início -->
 
+  <!-- Ínicio -->
   <div id="inicio" class="screen active">
-    <div class="dataHoraBrasilia" class="box">
-    <div class="title">Início</div>
     <div class="box">
+      <div class="title">Início</div>
       <p>Bem-vindo <b>Erik Motta!</b></p>
       <div id="mostrarHorarioBrasilia"></div>
+    </div>
+  </div> <!-- FIM TELA -->
+
+  <!-- TELA: Upload Excel -->
+  <div id="uploadExcel" class="screen">
+    <div class="title">📁 Importar e Visualizar Excel</div>
+    <div class="box">
+      <input type="file" id="input-excel" accept=".xlsx, .xls">
+      <div class="filter-container" id="filter-container"></div>
+      <div class="tabela-container">
+        <table id="excel-table">
+          <thead id="excel-thead"></thead>
+          <tbody id="excel-tbody"></tbody>
+        </table>
       </div>
     </div>
-  </div>
+  </div> <!-- FIM TELA -->
 
+  <!-- TELA: Conversor mm → mm² -->
+  <div id="conversor" class="screen">
+    <div class="title">📐 Conversor de diâmetro (mm) para área (mm²)</div>
+      <label for="valorMm">Diâmetro (mm):</label>
+      <input type="number" id="valorMm" step="0.01" placeholder="ex: 2.5">
+      <button onclick="converter()">Converter</button>
+      <div id="resultadoConversao" style="margin-top: 10px;"></div>
+    </div>
+  </div> <!-- FIM TELA -->
+  
+  <!-- TELA 3: Comparador -->
+  <div id="comparador" class="screen">
+    <div class="title">🔍 Comparador de Bitola</div>
+    <div class="box">
+      <label for="areaInput">Área (mm²):</label>
+      <input type="number" id="areaInput" step="0.01" placeholder="ex: 2.5">
+      <button onclick="compararAWG()">Comparar</button>
+      <div id="resultado" style="margin-top: 10px;"></div>
+    </div>
+  </div> <!-- FIM TELA -->
+  
   <!-- TELA: Tabela AWG -->
   <div id="tabela" class="screen">
     <div class="title">📋 Tabela AWG</div>
@@ -154,135 +207,91 @@
       </div>
     </div>
   </div> <!-- FIM TELA -->
-  
-  <!-- TELA: Conversor mm → mm² -->
-  <div id="conversor" class="screen">
-    <div class="dataHoraBrasilia" class="box">
-    <div class="title">📐 Conversor de diâmetro (mm) para área (mm²)</div>
-      <label for="valorMm">Diâmetro (mm):</label>
-      <input type="number" id="valorMm" step="0.01" placeholder="ex: 2.5">
-      <button onclick="converter()">Converter</button>
-      <div id="resultadoConversao" style="margin-top: 10px;"></div>
-    </div>
-  </div> <!-- FIM TELA -->
-  
-  <!-- TELA 3: Comparador -->
-  <div id="comparador" class="screen">
-    <div class="dataHoraBrasilia" class="box">
-    <div class="title">🔍 Comparador de Bitola</div>
-    <div class="box">
-      <label for="areaInput">Área (mm²):</label>
-      <input type="number" id="areaInput" step="0.01" placeholder="ex: 2.5">
-      <button onclick="compararAWG()">Comparar</button>
-      <div id="resultado" style="margin-top: 10px;"></div>
-    </div>
-  </div> <!-- FIM TELA -->
-  
-  <script> // JAVA SCRIPT
-    function showScreen(id) {
-      document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-    }
-  
-    const awgTabela = [
-      { awg: "0000 (4/0)", area: 107.22, diam: 11.684 },
-      { awg: "000 (3/0)", area: 85.03, diam: 10.405 },
-      { awg: "00 (2/0)", area: 67.43, diam: 9.266 },
-      { awg: "0 (1/0)", area: 53.48, diam: 8.251 },
-      { awg: "1", area: 42.41, diam: 7.348 },
-      { awg: "2", area: 33.62, diam: 6.544 },
-      { awg: "3", area: 26.67, diam: 5.827 },
-      { awg: "4", area: 21.15, diam: 5.189 },
-      { awg: "5", area: 16.77, diam: 4.621 },
-      { awg: "6", area: 13.30, diam: 4.115 },
-      { awg: "7", area: 10.55, diam: 3.665 },
-      { awg: "8", area: 8.37, diam: 3.264 },
-      { awg: "9", area: 6.63, diam: 2.906 },
-      { awg: "10", area: 5.26, diam: 2.588 },
-      { awg: "11", area: 4.17, diam: 2.304 },
-      { awg: "12", area: 3.31, diam: 2.053 },
-      { awg: "13", area: 2.62, diam: 1.828 },
-      { awg: "14", area: 2.08, diam: 1.628 },
-      { awg: "15", area: 1.65, diam: 1.45 },
-      { awg: "16", area: 1.31, diam: 1.291 },
-      { awg: "17", area: 1.04, diam: 1.15 },
-      { awg: "18", area: 0.823, diam: 1.024 },
-      { awg: "19", area: 0.653, diam: 0.911 },
-      { awg: "20", area: 0.518, diam: 0.812 },
-      { awg: "21", area: 0.410, diam: 0.723 },
-      { awg: "22", area: 0.326, diam: 0.644 },
-      { awg: "23", area: 0.258, diam: 0.573 },
-      { awg: "24", area: 0.205, diam: 0.511 },
-      { awg: "25", area: 0.162, diam: 0.455 },
-      { awg: "26", area: 0.129, diam: 0.405 },
-      { awg: "27", area: 0.102, diam: 0.361 },
-      { awg: "28", area: 0.081, diam: 0.321 },
-      { awg: "29", area: 0.064, diam: 0.286 },
-      { awg: "30", area: 0.050, diam: 0.255 }
-    ];
-  
-    function converter() {
-    const diametro = parseFloat(document.getElementById('valorMm').value);
-    if (isNaN(diametro)) {
-      document.getElementById('resultadoConversao').innerText = "Por favor, insira um número válido.";
-      return;
+
+  <script>
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
     }
 
-    const raio = diametro / 2;
-    const area = Math.PI * Math.pow(raio, 2);
+    function atualizaHorario() {
+      const options = { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const horaBrasilia = new Intl.DateTimeFormat('pt-BR', options).format(new Date());
+      document.getElementById('mostrarHorarioBrasilia').innerText = 'Horário de Brasília: ' + horaBrasilia;
+    }
+    setInterval(atualizaHorario, 1000);
+    atualizaHorario();
 
-    document.getElementById('resultadoConversao').innerText = `Área: ${area.toFixed(4)} mm²`;
+    document.getElementById('input-excel').addEventListener('change', function (e) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
 
-    // Aqui você salva no localStorage
-    localStorage.setItem('ultimaConversao', area.toFixed(4));
-  }
-  
-    function compararAWG() {
+        const thead = document.getElementById('excel-thead');
+        const tbody = document.getElementById('excel-tbody');
+        const filterContainer = document.getElementById('filter-container');
 
-      const valor = parseFloat(document.getElementById("areaInput").value);
-      if (isNaN(valor)) return alert("Digite um valor válido!");
-  
-      let maisProximo = awgTabela[0];
-      let menorDif = Math.abs(valor - maisProximo.area);
-  
-      for (const item of awgTabela) {
-        const dif = Math.abs(valor - item.area);
-        if (dif < menorDif) {
-          menorDif = dif;
-          maisProximo = item;
+        thead.innerHTML = '';
+        tbody.innerHTML = '';
+        filterContainer.innerHTML = '';
+
+        if (jsonData.length > 0) {
+          const headerRow = document.createElement('tr');
+          jsonData[0].forEach((headerText, index) => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+
+            const input = document.createElement('input');
+            input.placeholder = `Filtrar ${headerText}`;
+            input.setAttribute('data-index', index);
+            input.addEventListener('input', applyFilters);
+            filterContainer.appendChild(input);
+          });
+
+          // Botão Limpar Filtros
+          const clearButton = document.createElement('button');
+          clearButton.textContent = 'Limpar Filtros';
+          clearButton.onclick = () => {
+            filterContainer.querySelectorAll('input').forEach(input => input.value = '');
+            applyFilters();
+          };
+          filterContainer.appendChild(clearButton);
+
+          thead.appendChild(headerRow);
         }
-      }
 
-      document.getElementById("resultado").innerHTML = `
-        Valor informado: <strong>${valor} mm²</strong><br>
-        AWG mais próximo: <strong>${maisProximo.awg}</strong> (área real: ${maisProximo.area} mm²)
-      `;
+        jsonData.slice(1).forEach(rowData => {
+          const row = document.createElement('tr');
+          rowData.forEach(cellData => {
+            const cell = document.createElement('td');
+            cell.textContent = cellData !== undefined ? cellData : '';
+            row.appendChild(cell);
+          });
+          tbody.appendChild(row);
+        });
+      };
+      reader.readAsArrayBuffer(e.target.files[0]);
+    });
+
+    function applyFilters() {
+      const filters = Array.from(document.querySelectorAll('#filter-container input'));
+      const rows = document.querySelectorAll('#excel-tbody tr');
+
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const visible = filters.every(input => {
+          const value = input.value.trim().toLowerCase();
+          const cell = cells[input.getAttribute('data-index')];
+          return cell && cell.textContent.toLowerCase().includes(value);
+        });
+        row.style.display = visible ? '' : 'none';
+      });
     }
-
-    function atualizarHorarioBrasilia() {
-    const div = document.getElementById("mostrarHorarioBrasilia");
-
-    // Pega a hora de Brasília (UTC-3)
-    const agora = new Date();
-    const options = {
-      timeZone: 'America/Sao_Paulo',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    };
-
-    const horaBrasilia = agora.toLocaleString('pt-BR', options);
-    div.textContent = `Horário de Brasília: ${horaBrasilia}`;
-    }
-    
-    // Atualiza imediatamente
-    atualizarHorarioBrasilia();
-
-    // Atualiza a cada segundo
-    setInterval(atualizarHorarioBrasilia, 0);
-
   </script>
-  
+
+</body>
+</html>
