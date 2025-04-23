@@ -1,0 +1,139 @@
+    /* Reset e estilos gerais */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f6f8;
+      color: #333;
+    }
+
+    /* Barra de navegação */
+    .navbar {
+      background: #333;
+      color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .navbar button {
+      background: #444;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .navbar button:hover {
+      background: #555;
+    }
+
+    /* Telas */
+    .screen {
+      display: none;
+      padding: 20px;
+    }
+
+    .active {
+      display: block;
+    }
+
+    .title {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #222;
+    }
+
+    .box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Tabela */
+    .tabela-container {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background-color: #fafafa;
+      z-index: 2;
+    }
+
+    /* Filtros */
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+
+    .filter-container input {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .filter-container button {
+      padding: 6px 12px;
+      border: none;
+      background: #007BFF;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .filter-container button:hover {
+      background: #0056b3;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    label {
+      font-size: 14px;
+      color: #555;
+      margin-top: 6px;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #0099ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .input-group {
+      flex-direction: column;
+      margin-bottom: 40px; /* aumenta o espaço entre os blocos */
+    }

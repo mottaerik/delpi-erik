@@ -1,174 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <title>Delpi - Erik Motta</title>
-  <link rel="stylesheet" href="style.css">
-<style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f0f0f0;
-    }
-  
-    .navbar {
-      background: #333;
-      color: #fff;
-      padding: 10px 20px;
-      display: flex;
-      gap: 10px;
-    }
-  
-    .navbar button {
-      background: #444;
-      color: #fff;
-      border: none;
-      padding: 8px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-  
-    .navbar button:hover {
-      background: #555;
-    }
-  
-    .screen {
-      display: none;
-      padding: 20px;
-    }
-  
-    .active {
-      display: block;
-    }
-  
-    .title {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-  
-    .box {
-      background: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
 
-    .tabela-container {
-      height: 300px; /* Altura fixa para a rolagem */
-      overflow-y: auto;
-    }
+<body>
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
-
-    thead th {
-      position: sticky;
-      top: 0;
-      background-color: #f4f4f4;
-      z-index: 2;
-    }
-
-  </style>
-  
-<!-- BARRA DE NAVEGAÇÃO -->
+  <!-- Navegação -->
   <div class="navbar">
     <button onclick="showScreen('inicio')">Início</button>
+    <button onclick="showScreen('tempos')">Calcular tempos</button>
     <button onclick="showScreen('conversor')">📐 mm → mm²</button>
     <button onclick="showScreen('comparador')">🔍 Comparador</button>
     <button onclick="showScreen('tabela')">📋 Tabela AWG</button>
+    <button onclick="showScreen('uploadExcel')">📁 Importar Excel</button>
   </div>
-  
-  <!-- TELA: Início -->
+
+  <!-- Telas -->
 
   <div id="inicio" class="screen active">
-    <div class="dataHoraBrasilia" class="box">
-    <div class="title">Início</div>
     <div class="box">
+      <div class="title">Início</div>
       <p>Bem-vindo <b>Erik Motta!</b></p>
       <div id="mostrarHorarioBrasilia"></div>
-      </div>
     </div>
   </div>
 
-  <!-- TELA: Tabela AWG -->
-  <div id="tabela" class="screen">
-    <div class="title">📋 Tabela AWG</div>
+  <div id="uploadExcel" class="screen">
+    <div class="title">📁 Importar e Visualizar Excel</div>
     <div class="box">
+      <input type="file" id="input-excel" accept=".xlsx, .xls">
+      <div class="filter-container" id="filter-container"></div>
       <div class="tabela-container">
-      <table border="1" cellpadding="6">
-        <thead>
-          <tr>
-            <th>AWG</th>
-            <th>Diâmetro (mm)</th>
-            <th>Área (mm²)</th>
-            <th>Resistência (Ω/km)</th>
-            <th>Corrente Máx. (A)</th>
-            <th>Bitola Equivalente (mm)</th>
-          </tr>
-        </thead>
-          <tbody>
-            <tr><td>0000 (4/0)</td><td>11,684</td><td>107,22</td><td>0,160</td><td>380</td><td>120 mm</td></tr>
-            <tr><td>000 (3/0)</td><td>10,405</td><td>85,03</td><td>0,201</td><td>330</td><td>95 mm</td></tr>
-            <tr><td>00 (2/0)</td><td>9,266</td><td>67,43</td><td>0,254</td><td>283</td><td>70 mm</td></tr>
-            <tr><td>0 (1/0)</td><td>8,251</td><td>53,48</td><td>0,320</td><td>245</td><td>50 mm</td></tr>
-            <tr><td>1</td><td>7,348</td><td>42,41</td><td>0,403</td><td>211</td><td>35 mm</td></tr>
-            <tr><td>2</td><td>6,544</td><td>33,62</td><td>0,508</td><td>181</td><td>25 mm</td></tr>
-            <tr><td>3</td><td>5,827</td><td>26,67</td><td>0,641</td><td>157</td><td>16 mm</td></tr>
-            <tr><td>4</td><td>5,189</td><td>21,15</td><td>0,809</td><td>135</td><td>16 mm</td></tr>
-            <tr><td>5</td><td>4,621</td><td>16,77</td><td>1,02</td><td>119</td><td>10 mm</td></tr>
-            <tr><td>6</td><td>4,115</td><td>13,30</td><td>1,29</td><td>101</td><td>10 mm</td></tr>
-            <tr><td>7</td><td>3,665</td><td>10,55</td><td>1,63</td><td>89</td><td>6 mm</td></tr>
-            <tr><td>8</td><td>3,264</td><td>8,37</td><td>2,06</td><td>73</td><td>6 mm</td></tr>
-            <tr><td>9</td><td>2,906</td><td>6,63</td><td>2,59</td><td>62</td><td>4 mm</td></tr>
-            <tr><td>10</td><td>2,588</td><td>5,26</td><td>3,28</td><td>55</td><td>4 mm</td></tr>
-            <tr><td>11</td><td>2,304</td><td>4,17</td><td>4,13</td><td>41</td><td>2,5 mm</td></tr>
-            <tr><td>12</td><td>2,053</td><td>3,31</td><td>5,21</td><td>34</td><td>2,5 mm</td></tr>
-            <tr><td>13</td><td>1,828</td><td>2,62</td><td>6,57</td><td>29</td><td>1,5 mm</td></tr>
-            <tr><td>14</td><td>1,628</td><td>2,08</td><td>8,29</td><td>25</td><td>1,5 mm</td></tr>
-            <tr><td>15</td><td>1,45</td><td>1,65</td><td>10,45</td><td>22</td><td>1 mm</td></tr>
-            <tr><td>16</td><td>1,291</td><td>1,31</td><td>13,17</td><td>18</td><td>1 mm</td></tr>
-            <tr><td>17</td><td>1,15</td><td>1,04</td><td>16,61</td><td>16</td><td>0,75 mm</td></tr>
-            <tr><td>18</td><td>1,024</td><td>0,823</td><td>20,95</td><td>14</td><td>0,75 mm</td></tr>
-            <tr><td>19</td><td>0,911</td><td>0,653</td><td>26,42</td><td>11</td><td>0,5 mm</td></tr>
-            <tr><td>20</td><td>0,812</td><td>0,518</td><td>33,3</td><td>10</td><td>0,5 mm</td></tr>
-            <tr><td>21</td><td>0,723</td><td>0,410</td><td>42,0</td><td>8,7</td><td>0,35 mm</td></tr>
-            <tr><td>22</td><td>0,644</td><td>0,326</td><td>52,9</td><td>7</td><td>0,35 mm</td></tr>
-            <tr><td>23</td><td>0,573</td><td>0,258</td><td>66,8</td><td>5,8</td><td>0,25 mm</td></tr>
-            <tr><td>24</td><td>0,511</td><td>0,205</td><td>84,2</td><td>4,8</td><td>0,2 mm</td></tr>
-            <tr><td>25</td><td>0,455</td><td>0,162</td><td>106,0</td><td>4,3</td><td>0,2 mm</td></tr>
-            <tr><td>26</td><td>0,405</td><td>0,129</td><td>133,0</td><td>3,5</td><td>0,14 mm</td></tr>
-            <tr><td>27</td><td>0,361</td><td>0,102</td><td>168,0</td><td>3</td><td>0,14 mm</td></tr>
-            <tr><td>28</td><td>0,321</td><td>0,081</td><td>212,0</td><td>2,3</td><td>0,08 mm</td></tr>
-            <tr><td>29</td><td>0,286</td><td>0,064</td><td>268,0</td><td>1,8</td><td>0,08 mm</td></tr>
-            <tr><td>30</td><td>0,255</td><td>0,050</td><td>338,0</td><td>1,4</td><td>0,05 mm</td></tr>
-        </tbody>
+        <table id="excel-table">
+          <thead id="excel-thead"></thead>
+          <tbody id="excel-tbody"></tbody>
         </table>
       </div>
     </div>
-  </div> <!-- FIM TELA -->
-  
-  <!-- TELA: Conversor mm → mm² -->
+  </div>
+
   <div id="conversor" class="screen">
-    <div class="dataHoraBrasilia" class="box">
     <div class="title">📐 Conversor de diâmetro (mm) para área (mm²)</div>
+    <div class="box">
       <label for="valorMm">Diâmetro (mm):</label>
       <input type="number" id="valorMm" step="0.01" placeholder="ex: 2.5">
       <button onclick="converter()">Converter</button>
       <div id="resultadoConversao" style="margin-top: 10px;"></div>
     </div>
-  </div> <!-- FIM TELA -->
-  
-  <!-- TELA 3: Comparador -->
+  </div>
+
   <div id="comparador" class="screen">
-    <div class="dataHoraBrasilia" class="box">
     <div class="title">🔍 Comparador de Bitola</div>
     <div class="box">
       <label for="areaInput">Área (mm²):</label>
@@ -176,14 +62,328 @@
       <button onclick="compararAWG()">Comparar</button>
       <div id="resultado" style="margin-top: 10px;"></div>
     </div>
-  </div> <!-- FIM TELA -->
-  
-  <script> // JAVA SCRIPT
-    function showScreen(id) {
-      document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-    }
-  
+  </div>
+
+  <div id="tabela" class="screen">
+    <div class="title">📋 Tabela AWG</div>
+    <div class="box">
+      <div class="tabela-container">
+        <table border="1" cellpadding="6">
+          <thead>
+            <tr>
+              <th>AWG</th>
+              <th>Diâmetro (mm)</th>
+              <th>Área (mm²)</th>
+              <th>Resistência (Ω/km)</th>
+              <th>Corrente Máx. (A)</th>
+              <th>Bitola Externa com Isolação (mm) — Aproximado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0000 (4/0)</td>
+              <td>11,684</td>
+              <td>107,22</td>
+              <td>0,160</td>
+              <td>380</td>
+              <td>21,0 a 23,0</td>
+            </tr>
+            <tr>
+              <td>000 (3/0)</td>
+              <td>10,405</td>
+              <td>85,03</td>
+              <td>0,201</td>
+              <td>330</td>
+              <td>19,0 a 21,0</td>
+            </tr>
+            <tr>
+              <td>00 (2/0)</td>
+              <td>9,266</td>
+              <td>67,43</td>
+              <td>0,254</td>
+              <td>283</td>
+              <td>17,0 a 19,0</td>
+            </tr>
+            <tr>
+              <td>0 (1/0)</td>
+              <td>8,251</td>
+              <td>53,48</td>
+              <td>0,320</td>
+              <td>245</td>
+              <td>15,0 a 17,0</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>7,348</td>
+              <td>42,41</td>
+              <td>0,403</td>
+              <td>211</td>
+              <td>13,0 a 15,0</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>6,544</td>
+              <td>33,62</td>
+              <td>0,508</td>
+              <td>181</td>
+              <td>11,5 a 13,0</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>5,827</td>
+              <td>26,67</td>
+              <td>0,641</td>
+              <td>157</td>
+              <td>10,0 a 11,5</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>5,189</td>
+              <td>21,15</td>
+              <td>0,809</td>
+              <td>135</td>
+              <td>9,0 a 10,5</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>4,621</td>
+              <td>16,77</td>
+              <td>1,02</td>
+              <td>119</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>4,115</td>
+              <td>13,30</td>
+              <td>1,29</td>
+              <td>101</td>
+              <td>7,5 a 9,0</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>3,665</td>
+              <td>10,55</td>
+              <td>1,63</td>
+              <td>89</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>3,264</td>
+              <td>8,37</td>
+              <td>2,06</td>
+              <td>73</td>
+              <td>6,0 a 7,0</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>2,906</td>
+              <td>6,63</td>
+              <td>2,59</td>
+              <td>62</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>2,588</td>
+              <td>5,26</td>
+              <td>3,28</td>
+              <td>55</td>
+              <td>4,6 a 5,4</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>2,304</td>
+              <td>4,17</td>
+              <td>4,13</td>
+              <td>41</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>2,053</td>
+              <td>3,31</td>
+              <td>5,21</td>
+              <td>34</td>
+              <td>3,8 a 4,5</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td>1,828</td>
+              <td>2,62</td>
+              <td>6,57</td>
+              <td>29</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td>1,628</td>
+              <td>2,08</td>
+              <td>8,29</td>
+              <td>25</td>
+              <td>3,2 a 3,8</td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td>1,45</td>
+              <td>1,65</td>
+              <td>10,45</td>
+              <td>22</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td>1,291</td>
+              <td>1,31</td>
+              <td>13,17</td>
+              <td>18</td>
+              <td>2,6 a 3,2</td>
+            </tr>
+            <tr>
+              <td>17</td>
+              <td>1,15</td>
+              <td>1,04</td>
+              <td>16,61</td>
+              <td>16</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>18</td>
+              <td>1,024</td>
+              <td>0,823</td>
+              <td>20,95</td>
+              <td>14</td>
+              <td>2,0 a 2,6</td>
+            </tr>
+            <tr>
+              <td>19</td>
+              <td>0,911</td>
+              <td>0,653</td>
+              <td>26,42</td>
+              <td>11</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td>0,812</td>
+              <td>0,518</td>
+              <td>33,3</td>
+              <td>10</td>
+              <td>1,8 a 2,2</td>
+            </tr>
+            <tr>
+              <td>21</td>
+              <td>0,723</td>
+              <td>0,410</td>
+              <td>42,0</td>
+              <td>8,7</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>22</td>
+              <td>0,644</td>
+              <td>0,326</td>
+              <td>52,9</td>
+              <td>7</td>
+              <td>1,6 a 2,0</td>
+            </tr>
+            <tr>
+              <td>23</td>
+              <td>0,573</td>
+              <td>0,258</td>
+              <td>66,8</td>
+              <td>5,8</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>24</td>
+              <td>0,511</td>
+              <td>0,205</td>
+              <td>84,2</td>
+              <td>4,8</td>
+              <td>1,4 a 1,8</td>
+            </tr>
+            <tr>
+              <td>25</td>
+              <td>0,455</td>
+              <td>0,162</td>
+              <td>106,0</td>
+              <td>4,3</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>26</td>
+              <td>0,405</td>
+              <td>0,129</td>
+              <td>133,0</td>
+              <td>3,5</td>
+              <td>1,3 a 1,6</td>
+            </tr>
+            <tr>
+              <td>27</td>
+              <td>0,361</td>
+              <td>0,102</td>
+              <td>168,0</td>
+              <td>3</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>28</td>
+              <td>0,321</td>
+              <td>0,081</td>
+              <td>212,0</td>
+              <td>2,3</td>
+              <td>1,2 a 1,5</td>
+            </tr>
+            <tr>
+              <td>29</td>
+              <td>0,286</td>
+              <td>0,064</td>
+              <td>268,0</td>
+              <td>1,8</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>30</td>
+              <td>0,255</td>
+              <td>0,050</td>
+              <td>338,0</td>
+              <td>1,4</td>
+              <td>1,1 a 1,4</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="tempos" class="screen">
+    <div class="box">
+      <div class="title"><b>Calcular Tempos</b></div>
+
+      <!-- Primeiro grupo -->
+      <div class="input-group">
+        <input type="number" id="horasMil">
+        <label for="horasMil"><b>H/mil para segundos:</b></label>
+        <button onclick="horasMilParaSegundos()">Converter</button>
+      </div>
+
+      <!-- Segundo grupo -->
+      <div class="input-group">
+        <input type="number" id="segundosMil">
+        <label for="segundosMil"><b>Segundos para h/mil:</b></label>
+        <button onclick="segundosParaHorasMil()">Converter</button>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+  <!-- Fim telas -->
+
+  <script>
+
     const awgTabela = [
       { awg: "0000 (4/0)", area: 107.22, diam: 11.684 },
       { awg: "000 (3/0)", area: 85.03, diam: 10.405 },
@@ -220,36 +420,51 @@
       { awg: "29", area: 0.064, diam: 0.286 },
       { awg: "30", area: 0.050, diam: 0.255 }
     ];
-  
+
+    function horasMilParaSegundos() {
+
+      const horasMil = document.getElementById("horasMil").value;
+      let segundos = 0;
+
+      if (horasMil <= 0) {
+        alert('Não é possível inserir um valor igual ou menor que zero.');
+      }
+
+      else {
+        segundos = (horasMil * 3600) / 1000;
+        alert(`${horasMil} horas/mil é igual a ${segundos} segundos`);
+      }
+    }
+
     function converter() {
       const valor = document.getElementById("valorMm").value;
       const numero = parseFloat(valor);
-  
+
       if (isNaN(numero) || numero <= 0) {
         document.getElementById("resultadoConversao").textContent =
           "Por favor, insira um número válido maior que 0.";
         return;
       }
-  
+
       const raio = numero / 2;
-      const area = Math.PI * Math.pow(raio, 2);
+      const area = 3.1415 * Math.pow(raio, 2);
       const areaFormatada = area.toFixed(4);
       const numeroFormatado = numero.toFixed(2);
-  
+
       document.getElementById("resultadoConversao").innerHTML = `
         Diâmetro: <strong>${numeroFormatado} mm</strong><br>
         Área aproximada: <strong>${areaFormatada} mm²</strong>
-      `;    
+      `;
     }
-  
+
     function compararAWG() {
 
       const valor = parseFloat(document.getElementById("areaInput").value);
       if (isNaN(valor)) return alert("Digite um valor válido!");
-  
+
       let maisProximo = awgTabela[0];
       let menorDif = Math.abs(valor - maisProximo.area);
-  
+
       for (const item of awgTabela) {
         const dif = Math.abs(valor - item.area);
         if (dif < menorDif) {
@@ -264,30 +479,90 @@
       `;
     }
 
-    function atualizarHorarioBrasilia() {
-    const div = document.getElementById("mostrarHorarioBrasilia");
-
-    // Pega a hora de Brasília (UTC-3)
-    const agora = new Date();
-    const options = {
-      timeZone: 'America/Sao_Paulo',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    };
-
-    const horaBrasilia = agora.toLocaleString('pt-BR', options);
-    div.textContent = `Horário de Brasília: ${horaBrasilia}`;
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
     }
-    
-    // Atualiza imediatamente
-    atualizarHorarioBrasilia();
 
-    // Atualiza a cada segundo
-    setInterval(atualizarHorarioBrasilia, 0);
+    function atualizaHorario() {
+      const options = { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const horaBrasilia = new Intl.DateTimeFormat('pt-BR', options).format(new Date());
+      document.getElementById('mostrarHorarioBrasilia').innerText = 'Horário de Brasília: ' + horaBrasilia;
+    }
+    setInterval(atualizaHorario, 1000);
+    atualizaHorario();
+
+    document.getElementById('input-excel').addEventListener('change', function (e) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+        const thead = document.getElementById('excel-thead');
+        const tbody = document.getElementById('excel-tbody');
+        const filterContainer = document.getElementById('filter-container');
+
+        thead.innerHTML = '';
+        tbody.innerHTML = '';
+        filterContainer.innerHTML = '';
+
+        if (jsonData.length > 0) {
+          const headerRow = document.createElement('tr');
+          jsonData[0].forEach((headerText, index) => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+
+            const input = document.createElement('input');
+            input.placeholder = `Filtrar ${headerText}`;
+            input.setAttribute('data-index', index);
+            input.addEventListener('input', applyFilters);
+            filterContainer.appendChild(input);
+          });
+
+          // Botão Limpar Filtros
+          const clearButton = document.createElement('button');
+          clearButton.textContent = 'Limpar Filtros';
+          clearButton.onclick = () => {
+            filterContainer.querySelectorAll('input').forEach(input => input.value = '');
+            applyFilters();
+          };
+          filterContainer.appendChild(clearButton);
+
+          thead.appendChild(headerRow);
+        }
+
+        jsonData.slice(1).forEach(rowData => {
+          const row = document.createElement('tr');
+          rowData.forEach(cellData => {
+            const cell = document.createElement('td');
+            cell.textContent = cellData !== undefined ? cellData : '';
+            row.appendChild(cell);
+          });
+          tbody.appendChild(row);
+        });
+      };
+      reader.readAsArrayBuffer(e.target.files[0]);
+    });
+
+    function applyFilters() {
+      const filters = Array.from(document.querySelectorAll('#filter-container input'));
+      const rows = document.querySelectorAll('#excel-tbody tr');
+
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const visible = filters.every(input => {
+          const value = input.value.trim().toLowerCase();
+          const cell = cells[input.getAttribute('data-index')];
+          return cell && cell.textContent.toLowerCase().includes(value);
+        });
+        row.style.display = visible ? '' : 'none';
+      });
+    }
 
   </script>
-  
+</body>
+
+</html>
